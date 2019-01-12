@@ -69,3 +69,24 @@ Blockly.Arduino['servo_read'] = function(block) {
   var code = servoName + '.read()';
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+Blockly.Arduino['servo_move'] = function(block) {
+    var byteaddress = block.getFieldValue('address');
+    var angle = block.getFieldValue('angle');
+    var servoName = 'servo_ba_' + byteaddress;
+  
+    Blockly.Arduino.reservePin(
+        block, byteaddress, Blockly.Arduino.PinTypes.SERVO, 'Servo Read');
+  
+    Blockly.Arduino.addInclude('servo', '#include <Servo.h>');
+    Blockly.Arduino.addInclude('wire', '#include <Wire.h>');
+    Blockly.Arduino.addDeclaration('servo_' + byteaddress, 'Servo ' + servoName + ';');
+  
+    var setupCode = servoName + '.attach(' + byteaddress + ');';
+    Blockly.Arduino.addSetup('servo_' + byteaddress, setupCode, true);
+  
+    // var code = servoName + '.read()';
+    var code = 'byte values[1] = {' + angle + '};\nWire.beginTransmission(' + byteaddress + ');\nWire.write(values, 1);\nWire.endTransmission(true)';
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+  };
+  

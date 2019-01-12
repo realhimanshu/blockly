@@ -82,3 +82,34 @@ Blockly.Blocks['servo_read'] = {
         this, 'SERVO_PIN', 'digitalPins');
   }
 };
+
+Blockly.Blocks['servo_move'] = {
+  /**
+   * Block for reading an angle value of a servo pin.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl('http://arduino.cc/en/Reference/ServoRead');
+    this.setColour(Blockly.Blocks.servo.HUE);
+    this.appendDummyInput()
+        .appendField('Move Servo Motor')
+        .appendField(new Blockly.FieldDropdown(
+            Blockly.Arduino.Boards.selected.digitalPins), 'address')
+        .appendField('Angle')
+        .appendField(new Blockly.FieldDropdown(
+            Blockly.Arduino.Boards.selected.digitalPins), 'angle');
+    this.setOutput(true, Blockly.Types.NUMBER.output);
+  },
+  /** @return {string} The type of return value for the block, an integer. */
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  },
+  /**
+   * Updates the content of the the pin related fields.
+   * @this Blockly.Block
+   */
+  updateFields: function() {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+        this, 'SERVO_PIN', 'digitalPins');
+  }
+};
